@@ -74,8 +74,9 @@
                     </div>
                     <div class="flex items-center justify-between">
                          <div class="w-1/4 flex justify-start">
-                             <a href="https://www.facebook.com/kebuenaqro/?locale=es_LA" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-orange-500/50 transition-colors">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-200" viewBox="0 0 24 24" fill="currentColor">
+                             <a href="https://www.facebook.com/kebuenaqro/?locale=es_LA" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-black/20 transition-colors">
+                                 <!-- CAMBIO: Se actualiza el color del ícono a azul -->
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
                                      <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path>
                                  </svg>
                              </a>
@@ -115,8 +116,9 @@
                     </div>
                     <div class="flex items-center justify-between">
                          <div class="w-1/4 flex justify-start">
-                             <a href="https://www.facebook.com/kebuenaqro/?locale=es_LA" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-orange-500/50 transition-colors">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-200" viewBox="0 0 24 24" fill="currentColor">
+                             <a href="https://www.facebook.com/kebuenaqro/?locale=es_LA" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-black/20 transition-colors">
+                                 <!-- CAMBIO: Se actualiza el color del ícono a azul -->
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
                                      <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path>
                                  </svg>
                              </a>
@@ -139,7 +141,9 @@
         <div class="mt-8">
             <div class="bg-orange-800/80 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden border border-orange-700">
                 <div id="news-ticker-container" class="whitespace-nowrap">
-                    <div id="news-list" class="inline-block"></div>
+                    <div id="news-list" class="inline-block">
+                        <!-- Las noticias se insertarán aquí dinámicamente -->
+                    </div>
                 </div>
             </div>
             <div class="mt-6 text-center">
@@ -152,6 +156,12 @@
                     <span class="text-left">Para instalar la app, toca <strong>Compartir</strong> y luego <strong>"Agregar a la pantalla de inicio"</strong>.</span>
                 </div>
             </div>
+        </div>
+
+        <div class="mt-8 text-center">
+             <a href="https://www.kebuenaqro.mx" target="_blank" rel="noopener noreferrer" class="text-orange-300 hover:text-orange-100 hover:underline transition-colors text-lg">
+                www.kebuenaqro.mx
+             </a>
         </div>
     </div>
 
@@ -313,15 +323,10 @@
             loadingText.textContent = "Haz clic para escuchar";
         }
         
-        // ===================================================================
-        // === NUEVO: Lógica para cargar y mostrar noticias dinámicas ===
-        // ===================================================================
-        async function populateNews() {
+        function populateNews() {
             const newsList = document.getElementById('news-list');
             if (!newsList) return;
 
-            // --- Puedes editar esta lista para cambiar las noticias ---
-            // Simplemente cambia el 'title', el 'link' a la noticia real, y la 'thumbnail'.
             const newsData = [
                 { title: "Presentan programa oficial de la Feria de Cadereyta 2025.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Feria" },
                 { title: "Anuncian cierre de vialidades en el centro de Jalpan por obras.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Obras" },
@@ -341,7 +346,7 @@
                 `;
             });
             
-            newsList.innerHTML = newsHTML + newsHTML; // Se duplica para el efecto de scroll infinito
+            newsList.innerHTML = newsHTML + newsHTML;
             newsList.classList.add('animate-scroll');
         }
 
