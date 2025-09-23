@@ -88,8 +88,8 @@
         const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
         document.getElementById('manifest-link').setAttribute('href', URL.createObjectURL(manifestBlob));
         
-        // CAMBIO: URL de streaming actualizada con tu enlace.
-        const STREAM_URL = "https://laradiossl.online:10567/";
+        // CORRECCIÓN: Se agrega un punto y coma al final, común en streams Shoutcast/Icecast.
+        const STREAM_URL = "https://laradiossl.online:10567/;";
         
         const player = document.getElementById('player');
         const playPauseBtn = document.getElementById('play-pause-btn');
@@ -130,6 +130,11 @@
         }
         
         function loadStream() {
+            loadingText.textContent = "Conectando...";
+            loadingText.classList.remove('text-red-400');
+            videoOverlay.classList.remove('opacity-0');
+            
+            player.src = ""; // Forza la recarga
             player.src = STREAM_URL;
             player.load();
             player.play()
@@ -138,8 +143,8 @@
                     setPlayState(true);
                 })
                 .catch(error => {
-                    loadingText.textContent = "Haz clic en play para escuchar";
-                    videoOverlay.classList.remove('opacity-0');
+                    // Este catch a menudo no se dispara para errores de red, el evento 'error' es más confiable.
+                    console.error("Error en Promise de Play:", error);
                     setPlayState(false); 
                 });
         }
@@ -150,6 +155,17 @@
         player.addEventListener('waiting', () => { loadingText.textContent = "Cargando..."; videoOverlay.classList.remove('opacity-0'); });
         player.addEventListener('playing', () => { videoOverlay.classList.add('opacity-0'); });
         volumeControl.addEventListener('input', (e) => { player.volume = e.target.value / 100; });
+        
+        player.addEventListener('error', (e) => {
+            console.error("Error de audio:", player.error);
+             // CORRECCIÓN: Mensaje de error más descriptivo.
+            loadingText.innerHTML = `
+                <span class="text-red-400">Error de Conexión</span>
+                <span class="text-sm text-slate-400 mt-2 block">La radio podría estar fuera de línea o no permite reproductores web.</span>
+            `;
+            videoOverlay.classList.remove('opacity-0');
+            setPlayState(false);
+        });
 
         window.addEventListener('DOMContentLoaded', () => {
             videoOverlay.classList.remove('opacity-0');
