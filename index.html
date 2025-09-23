@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kebuenaqro</title>
     <meta name="theme-color" content="#c2410c"/>
     <meta name="description" content="Reproductor de streaming de Kebuenaqro.">
@@ -73,7 +73,13 @@
                         <span id="total-time-1" class="text-xs w-14 text-center text-orange-200 tabular-nums">--:--</span>
                     </div>
                     <div class="flex items-center justify-between">
-                         <div class="w-1/4"></div>
+                         <div class="w-1/4 flex justify-start">
+                             <a href="https://www.facebook.com/kebuenaqro/?locale=es_LA" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-orange-500/50 transition-colors">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-200" viewBox="0 0 24 24" fill="currentColor">
+                                     <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path>
+                                 </svg>
+                             </a>
+                         </div>
                          <div class="flex items-center gap-4 w-1/2 justify-center">
                              <button id="play-pause-btn-1" class="p-4 bg-orange-500 rounded-full hover:bg-orange-400 active:scale-95 transition-transform disabled:opacity-50 disabled:bg-slate-600">
                                  <svg id="play-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8.002v4.005a1 1 0 001.555.832l3.198-2.003a1 1 0 000-1.664l-3.198-2.003z" clip-rule="evenodd"/></svg>
@@ -108,7 +114,13 @@
                         <span id="total-time-2" class="text-xs w-14 text-center text-orange-200 tabular-nums">--:--</span>
                     </div>
                     <div class="flex items-center justify-between">
-                         <div class="w-1/4"></div>
+                         <div class="w-1/4 flex justify-start">
+                             <a href="https://www.facebook.com/kebuenaqro/?locale=es_LA" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-orange-500/50 transition-colors">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-200" viewBox="0 0 24 24" fill="currentColor">
+                                     <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path>
+                                 </svg>
+                             </a>
+                         </div>
                          <div class="flex items-center gap-4 w-1/2 justify-center">
                              <button id="play-pause-btn-2" class="p-4 bg-orange-500 rounded-full hover:bg-orange-400 active:scale-95 transition-transform disabled:opacity-50 disabled:bg-slate-600">
                                  <svg id="play-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8.002v4.005a1 1 0 001.555.832l3.198-2.003a1 1 0 000-1.664l-3.198-2.003z" clip-rule="evenodd"/></svg>
@@ -178,30 +190,6 @@
             iosInstallBanner.classList.remove('hidden');
         }
 
-        function populateNews() {
-            const newsData = [
-                { title: "Anuncian nuevo festival de música en Querétaro para Diciembre.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Música" },
-                { title: "El equipo local de fútbol gana el campeonato regional.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Deporte" },
-                { title: "El clima para hoy: soleado con una máxima de 28°C.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Clima" },
-                { title: "Secretaría de Cultura presenta nueva exposición en el centro histórico.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Cultura" },
-                { title: "Reportan tráfico lento en la autopista México-Querétaro.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Tráfico" },
-                { title: "Abren nuevas rutas de transporte público en la ciudad.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Ciudad" }
-            ];
-            const newsList = document.getElementById('news-list');
-            if (!newsList) return;
-            let newsHTML = '';
-            newsData.forEach(news => {
-                newsHTML += `
-                    <a href="${news.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center flex-shrink-0 px-6 py-3 hover:bg-orange-800 transition-colors rounded-lg">
-                        <img src="${news.thumbnail}" alt="Miniatura" class="h-10 w-10 object-cover rounded-md mr-4 flex-shrink-0">
-                        <span class="text-sm text-orange-200 whitespace-normal">${news.title}</span>
-                    </a>
-                `;
-            });
-            newsList.innerHTML = newsHTML + newsHTML;
-            newsList.classList.add('animate-scroll');
-        }
-        
         function populateBanners() {
             const bannerImages = [
                 'banner1.jpeg', 'banner2.jpeg', 'banner3.jpeg', 'banner4.jpeg', 'banner5.jpeg'
@@ -213,7 +201,6 @@
             let bannerHTML = '';
             bannerImages.forEach(imgFile => {
                 const imgUrl = `${baseUrl}${imgFile}`;
-                // CAMBIO: Se usa object-contain para que la imagen se vea completa
                 bannerHTML += `<div class="w-full flex-shrink-0 bg-black flex justify-center items-center h-48"><img src="${imgUrl}" alt="Banner" class="w-auto h-full object-contain"></div>`;
             });
 
@@ -325,6 +312,39 @@
             volumeControl.addEventListener('input', (e) => { player.volume = e.target.value / 100; });
             loadingText.textContent = "Haz clic para escuchar";
         }
+        
+        // ===================================================================
+        // === NUEVO: Lógica para cargar y mostrar noticias dinámicas ===
+        // ===================================================================
+        async function populateNews() {
+            const newsList = document.getElementById('news-list');
+            if (!newsList) return;
+
+            // --- Puedes editar esta lista para cambiar las noticias ---
+            // Simplemente cambia el 'title', el 'link' a la noticia real, y la 'thumbnail'.
+            const newsData = [
+                { title: "Presentan programa oficial de la Feria de Cadereyta 2025.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Feria" },
+                { title: "Anuncian cierre de vialidades en el centro de Jalpan por obras.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Obras" },
+                { title: "Querétaro se posiciona como líder en inversión aeroespacial.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Qro" },
+                { title: "Invitan a la ruta del queso y el vino en Cadereyta este fin de semana.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Ruta" },
+                { title: "Jalpan de Serra Pueblo Mágico, rompe récord de visitantes.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Turismo" },
+                { title: "Abren nueva convocatoria para becas universitarias en Querétaro.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Becas" }
+            ];
+            
+            let newsHTML = '';
+            newsData.forEach(news => {
+                newsHTML += `
+                    <a href="${news.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center flex-shrink-0 px-6 py-3 hover:bg-orange-800 transition-colors rounded-lg">
+                        <img src="${news.thumbnail}" alt="Miniatura" class="h-10 w-10 object-cover rounded-md mr-4 flex-shrink-0">
+                        <span class="text-sm text-orange-200 whitespace-normal">${news.title}</span>
+                    </a>
+                `;
+            });
+            
+            newsList.innerHTML = newsHTML + newsHTML; // Se duplica para el efecto de scroll infinito
+            newsList.classList.add('animate-scroll');
+        }
+
 
         window.addEventListener('DOMContentLoaded', () => {
             initializePlayer({
