@@ -9,7 +9,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="" id="manifest-link">
-    <link rel="apple-touch-icon" href="https://fantasma-beep.github.io/kebuenaqro/logo.png?v=2">
+    <link rel="apple-touch-icon" href="https://fantasma-beep.github.io/kebuenaqro/logotipo2.png?v=3">
 
     <style>
         body {
@@ -20,78 +20,122 @@
         }
         input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;width:100%}
         input[type=range]:focus{outline:none}
-        input[type=range]::-webkit-slider-runnable-track{background-color:#9a3412;border-radius:.5rem;height:.5rem} /* Naranja más oscuro */
-        input[type=range]::-moz-range-track{background-color:#9a3412;border-radius:.5rem;height:.5rem} /* Naranja más oscuro */
-        input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;margin-top:-6px;background-color:#fdba74;border-radius:50%;height:1.25rem;width:1.25rem;border:2px solid #c2410c} /* Naranja claro con borde naranja */
-        input[type=range]::-moz-range-thumb{border:none;border-radius:50%;background-color:#fdba74;height:1.25rem;width:1.25rem;border:2px solid #c2410c} /* Naranja claro con borde naranja */
+        input[type=range]::-webkit-slider-runnable-track{background-color:#9a3412;border-radius:.5rem;height:.5rem}
+        input[type=range]::-moz-range-track{background-color:#9a3412;border-radius:.5rem;height:.5rem}
+        input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;margin-top:-6px;background-color:#fdba74;border-radius:50%;height:1.25rem;width:1.25rem;border:2px solid #c2410c}
+        input[type=range]::-moz-range-thumb{border:none;border-radius:50%;background-color:#fdba74;height:1.25rem;width:1.25rem;border:2px solid #c2410c}
         
-        /* --- Animación para el slider de noticias --- */
         @keyframes scroll {
             from { transform: translateX(0); }
             to { transform: translateX(-50%); }
         }
         .animate-scroll {
-            animation: scroll 60s linear infinite; /* Aumentamos la duración para más noticias */
+            animation: scroll 60s linear infinite; 
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .logo-playing {
+            animation: spin 15s linear infinite;
         }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-200 flex items-center justify-center min-h-screen font-sans antialiased p-4">
 
-    <div class="w-full max-w-md">
-        <div class="bg-orange-700 rounded-2xl shadow-2xl overflow-hidden border border-orange-800">
+    <!-- CAMBIO: Contenedor principal más ancho -->
+    <div class="w-full max-w-5xl mx-auto">
+        <!-- CAMBIO: Contenedor flex para los reproductores -->
+        <div class="flex flex-col md:flex-row justify-center gap-8">
             
-            <div class="aspect-video bg-white flex items-center justify-center relative group">
-                <img src="https://fantasma-beep.github.io/kebuenaqro/logo.png?v=2" alt="Kebuenaqro Logo" class="w-52 h-52 object-contain rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/208x208/1e293b/f97316?text=Logo';">
-                <audio id="player" class="w-full h-full hidden" crossOrigin="anonymous"></audio>
-                <div id="video-overlay" class="absolute inset-0 bg-orange-800/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-4 transition-opacity duration-300">
-                    <h2 id="loading-text" class="text-xl font-bold text-white">Cargando streaming...</h2>
+            <!-- === REPRODUCTOR 1: KEBUENA CADEREYTA === -->
+            <div class="w-full max-w-md bg-orange-700 rounded-2xl shadow-2xl overflow-hidden border border-orange-800">
+                <div class="aspect-video bg-white flex items-center justify-center relative group">
+                    <img id="player-logo-1" src="https://fantasma-beep.github.io/kebuenaqro/logo.png?v=2" alt="Kebuenaqro Logo Original" class="w-52 h-52 object-contain rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/208x208/1e293b/f97316?text=Logo';">
+                    <audio id="player-1" class="w-full h-full hidden" crossOrigin="anonymous"></audio>
+                    <div id="video-overlay-1" class="absolute inset-0 bg-orange-800/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-4 transition-opacity duration-300">
+                        <h2 id="loading-text-1" class="text-xl font-bold text-white">Cargando streaming...</h2>
+                    </div>
+                </div>
+                <div class="p-4 text-center border-b border-orange-800">
+                    <h3 id="track-title-1" class="font-bold text-lg truncate text-white">Kebuena Cadereyta</h3>
+                    <p id="track-artist-1" class="text-sm text-orange-200">Streaming en Vivo</p>
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span id="current-time-1" class="text-xs w-14 text-center text-orange-200 tabular-nums">--:--</span>
+                        <div class="w-full text-center text-xs text-orange-200 font-semibold tracking-wider">STREAMING EN VIVO</div>
+                        <span id="total-time-1" class="text-xs w-14 text-center text-orange-200 tabular-nums">--:--</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                         <div class="w-1/4"></div>
+                         <div class="flex items-center gap-4 w-1/2 justify-center">
+                             <button id="play-pause-btn-1" class="p-4 bg-orange-500 rounded-full hover:bg-orange-400 active:scale-95 transition-transform disabled:opacity-50 disabled:bg-slate-600">
+                                 <svg id="play-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8.002v4.005a1 1 0 001.555.832l3.198-2.003a1 1 0 000-1.664l-3.198-2.003z" clip-rule="evenodd"/></svg>
+                                 <svg id="pause-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white hidden" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                             </button>
+                         </div>
+                         <div class="w-1/4 flex items-center justify-end gap-2">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-200" viewBox="0 0 20 20" fill="currentColor"><path d="M5.071 8.238a.75.75 0 01.093-1.055l1.5-1.5A.75.75 0 017.72 6.74l-1.5 1.5a.75.75 0 01-1.054.093zm.593 4.586a.75.75 0 011.06-1.06l1.25 1.25a.75.75 0 11-1.06 1.06l-1.25-1.25zM12 8a1 1 0 100-2 1 1 0 000 2zM4 10a1 1 0 11-2 0 1 1 0 012 0zm11.13-1.13a.75.75 0 10-1.06-1.06l-1.25 1.25a.75.75 0 001.06 1.06l1.25-1.25zM12 4a1 1 0 100 2 1 1 0 000-2zm-8 6a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                             <input type="range" id="volume-control-1" value="100" min="0" max="100" class="w-24">
+                         </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="p-4 text-center border-b border-orange-800">
-                <h3 id="track-title" class="font-bold text-lg truncate text-white">Kebuenaqro</h3>
-                <p id="track-artist" class="text-sm text-orange-200">Streaming en Vivo</p>
-            </div>
-
-            <div class="p-4 space-y-4">
-                <div class="flex items-center gap-2">
-                    <span id="current-time" class="text-xs w-14 text-center text-orange-200 tabular-nums">--:--</span>
-                    <div class="w-full text-center text-xs text-orange-200 font-semibold tracking-wider">STREAMING EN VIVO</div>
-                    <span id="total-time" class="text-xs w-14 text-center text-orange-200 tabular-nums">--:--</span>
+            <!-- === REPRODUCTOR 2: KEBUENA JALPAN === -->
+            <div class="w-full max-w-md bg-orange-700 rounded-2xl shadow-2xl overflow-hidden border border-orange-800">
+                <div class="aspect-video bg-white flex items-center justify-center relative group">
+                    <img id="player-logo-2" src="https://fantasma-beep.github.io/kebuenaqro/logotipo2.png?v=3" alt="Kebuenaqro Logo" class="w-52 h-52 object-contain rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/208x208/1e293b/f97316?text=Logo';">
+                    <audio id="player-2" class="w-full h-full hidden" crossOrigin="anonymous"></audio>
+                    <div id="video-overlay-2" class="absolute inset-0 bg-orange-800/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-4 transition-opacity duration-300">
+                        <h2 id="loading-text-2" class="text-xl font-bold text-white">Cargando streaming...</h2>
+                    </div>
                 </div>
-
-                <div class="flex items-center justify-between">
-                     <div class="w-1/4"></div>
-                     <div class="flex items-center gap-4 w-1/2 justify-center">
-                         <button id="play-pause-btn" class="p-4 bg-orange-500 rounded-full hover:bg-orange-400 active:scale-95 transition-transform disabled:opacity-50 disabled:bg-slate-600">
-                             <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8.002v4.005a1 1 0 001.555.832l3.198-2.003a1 1 0 000-1.664l-3.198-2.003z" clip-rule="evenodd"/></svg>
-                             <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white hidden" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-                         </button>
-                     </div>
-                     <div class="w-1/4 flex items-center justify-end gap-2">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-200" viewBox="0 0 20 20" fill="currentColor"><path d="M5.071 8.238a.75.75 0 01.093-1.055l1.5-1.5A.75.75 0 017.72 6.74l-1.5 1.5a.75.75 0 01-1.054.093zm.593 4.586a.75.75 0 011.06-1.06l1.25 1.25a.75.75 0 11-1.06 1.06l-1.25-1.25zM12 8a1 1 0 100-2 1 1 0 000 2zM4 10a1 1 0 11-2 0 1 1 0 012 0zm11.13-1.13a.75.75 0 10-1.06-1.06l-1.25 1.25a.75.75 0 001.06 1.06l1.25-1.25zM12 4a1 1 0 100 2 1 1 0 000-2zm-8 6a1 1 0 100 2 1 1 0 000-2z"/></svg>
-                         <input type="range" id="volume-control" value="100" min="0" max="100" class="w-24">
-                     </div>
+                <div class="p-4 text-center border-b border-orange-800">
+                    <h3 id="track-title-2" class="font-bold text-lg truncate text-white">Kebuena Jalpan</h3>
+                    <p id="track-artist-2" class="text-sm text-orange-200">Streaming en Vivo</p>
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span id="current-time-2" class="text-xs w-14 text-center text-orange-200 tabular-nums">--:--</span>
+                        <div class="w-full text-center text-xs text-orange-200 font-semibold tracking-wider">STREAMING EN VIVO</div>
+                        <span id="total-time-2" class="text-xs w-14 text-center text-orange-200 tabular-nums">--:--</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                         <div class="w-1/4"></div>
+                         <div class="flex items-center gap-4 w-1/2 justify-center">
+                             <button id="play-pause-btn-2" class="p-4 bg-orange-500 rounded-full hover:bg-orange-400 active:scale-95 transition-transform disabled:opacity-50 disabled:bg-slate-600">
+                                 <svg id="play-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8.002v4.005a1 1 0 001.555.832l3.198-2.003a1 1 0 000-1.664l-3.198-2.003z" clip-rule="evenodd"/></svg>
+                                 <svg id="pause-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white hidden" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                             </button>
+                         </div>
+                         <div class="w-1/4 flex items-center justify-end gap-2">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-200" viewBox="0 0 20 20" fill="currentColor"><path d="M5.071 8.238a.75.75 0 01.093-1.055l1.5-1.5A.75.75 0 017.72 6.74l-1.5 1.5a.75.75 0 01-1.054.093zm.593 4.586a.75.75 0 011.06-1.06l1.25 1.25a.75.75 0 11-1.06 1.06l-1.25-1.25zM12 8a1 1 0 100-2 1 1 0 000 2zM4 10a1 1 0 11-2 0 1 1 0 012 0zm11.13-1.13a.75.75 0 10-1.06-1.06l-1.25 1.25a.75.75 0 001.06 1.06l1.25-1.25zM12 4a1 1 0 100 2 1 1 0 000-2zm-8 6a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                             <input type="range" id="volume-control-2" value="100" min="0" max="100" class="w-24">
+                         </div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div class="mt-4 bg-orange-800/80 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden border border-orange-700">
-            <div id="news-ticker-container" class="whitespace-nowrap">
-                <div id="news-list" class="inline-block">
-                    <!-- Las noticias se insertarán aquí dinámicamente -->
+        <!-- Contenedor de Noticias y Banner de Instalación (ahora debajo de los reproductores) -->
+        <div class="mt-8">
+            <div class="bg-orange-800/80 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden border border-orange-700">
+                <div id="news-ticker-container" class="whitespace-nowrap">
+                    <div id="news-list" class="inline-block"></div>
                 </div>
             </div>
-        </div>
-
-        <div class="mt-6 text-center">
-            <button id="install-btn" class="hidden bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                <span>Instalar Aplicación</span>
-            </button>
-            <div id="ios-install-banner" class="hidden bg-orange-800/80 p-3 rounded-lg text-white text-sm flex items-center justify-center gap-3 animate-pulse">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                <span class="text-left">Para instalar la app, toca <strong>Compartir</strong> y luego <strong>"Agregar a la pantalla de inicio"</strong>.</span>
+            <div class="mt-6 text-center">
+                <button id="install-btn" class="hidden bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    <span>Instalar Aplicación</span>
+                </button>
+                <div id="ios-install-banner" class="hidden bg-orange-800/80 p-3 rounded-lg text-white text-sm flex items-center justify-center gap-3 animate-pulse">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                    <span class="text-left">Para instalar la app, toca <strong>Compartir</strong> y luego <strong>"Agregar a la pantalla de inicio"</strong>.</span>
+                </div>
             </div>
         </div>
     </div>
@@ -100,81 +144,17 @@
         const manifest = {
             "name": "Kebuenaqro", "short_name": "Kebuenaqro", "start_url": ".", "display": "standalone",
             "background_color": "#1e293b", "theme_color": "#c2410c", "description": "Reproductor de Kebuenaqro.",
-            "icons": [{"src": "https://fantasma-beep.github.io/kebuenaqro/logo.png?v=2", "type": "image/png", "sizes": "192x192"}, {"src": "https://fantasma-beep.github.io/kebuenaqro/logo.png?v=2", "type": "image/png", "sizes": "512x512"}]
+            "icons": [{"src": "https://fantasma-beep.github.io/kebuenaqro/logotipo2.png?v=3", "type": "image/png", "sizes": "192x192"}, {"src": "https://fantasma-beep.github.io/kebuenaqro/logotipo2.png?v=3", "type": "image/png", "sizes": "512x512"}]
         };
         const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
         document.getElementById('manifest-link').setAttribute('href', URL.createObjectURL(manifestBlob));
         
-        const STREAM_URL = "https://laradiossl.online:10567/;";
-        
-        const player = document.getElementById('player');
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const playIcon = document.getElementById('play-icon');
-        const pauseIcon = document.getElementById('pause-icon');
-        const volumeControl = document.getElementById('volume-control');
-        const videoOverlay = document.getElementById('video-overlay');
-        const loadingText = document.getElementById('loading-text');
         const installBtn = document.getElementById('install-btn');
         const iosInstallBanner = document.getElementById('ios-install-banner');
         let deferredPrompt;
         
-        let elapsedTimeInterval = null;
-        let secondsElapsed = 0;
-
         const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isAppInstalled = () => window.matchMedia('(display-mode: standalone)').matches;
-
-        function formatTime(totalSeconds) {
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
-            const paddedMinutes = String(minutes).padStart(2, '0');
-            const paddedSeconds = String(seconds).padStart(2, '0');
-            if (hours > 0) {
-                const paddedHours = String(hours).padStart(2, '0');
-                return `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
-            }
-            return `${paddedMinutes}:${paddedSeconds}`;
-        }
-
-        function updateClock() {
-            const clockElement = document.getElementById('total-time');
-            if (clockElement) {
-                const now = new Date();
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                clockElement.textContent = `${hours}:${minutes}`;
-            }
-        }
-
-        // --- CORRECCIÓN: Se usa una lista de noticias estática para evitar errores de red ---
-        function populateNews() {
-            const newsData = [
-                { title: "Anuncian nuevo festival de música en Querétaro para Diciembre.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Música" },
-                { title: "El equipo local de fútbol gana el campeonato regional.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Deporte" },
-                { title: "El clima para hoy: soleado con una máxima de 28°C.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Clima" },
-                { title: "Secretaría de Cultura presenta nueva exposición en el centro histórico.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Cultura" },
-                { title: "Reportan tráfico lento en la autopista México-Querétaro.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Tráfico" },
-                { title: "Abren nuevas rutas de transporte público en la ciudad.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Ciudad" }
-            ];
-            const newsList = document.getElementById('news-list');
-            if (!newsList) return;
-
-            let newsHTML = '';
-            
-            newsData.forEach(news => {
-                newsHTML += `
-                    <a href="${news.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center flex-shrink-0 px-6 py-3 hover:bg-orange-800 transition-colors rounded-lg">
-                        <img src="${news.thumbnail}" alt="Miniatura" class="h-10 w-10 object-cover rounded-md mr-4 flex-shrink-0">
-                        <span class="text-sm text-orange-200 whitespace-normal">${news.title}</span>
-                    </a>
-                `;
-            });
-            
-            newsList.innerHTML = newsHTML + newsHTML;
-            newsList.classList.add('animate-scroll');
-        }
-
 
         window.addEventListener('beforeinstallprompt', (e) => {
           if (isAppInstalled()) return;
@@ -195,71 +175,141 @@
             iosInstallBanner.classList.remove('hidden');
         }
 
-        function setPlayState(isPlaying) {
-            playIcon.classList.toggle('hidden', isPlaying);
-            pauseIcon.classList.toggle('hidden', !isPlaying);
+        function populateNews() {
+            const newsData = [
+                { title: "Anuncian nuevo festival de música en Querétaro para Diciembre.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Música" },
+                { title: "El equipo local de fútbol gana el campeonato regional.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Deporte" },
+                { title: "El clima para hoy: soleado con una máxima de 28°C.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Clima" },
+                { title: "Secretaría de Cultura presenta nueva exposición en el centro histórico.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Cultura" },
+                { title: "Reportan tráfico lento en la autopista México-Querétaro.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Tráfico" },
+                { title: "Abren nuevas rutas de transporte público en la ciudad.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Ciudad" }
+            ];
+            const newsList = document.getElementById('news-list');
+            if (!newsList) return;
+            let newsHTML = '';
+            newsData.forEach(news => {
+                newsHTML += `
+                    <a href="${news.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center flex-shrink-0 px-6 py-3 hover:bg-orange-800 transition-colors rounded-lg">
+                        <img src="${news.thumbnail}" alt="Miniatura" class="h-10 w-10 object-cover rounded-md mr-4 flex-shrink-0">
+                        <span class="text-sm text-orange-200 whitespace-normal">${news.title}</span>
+                    </a>
+                `;
+            });
+            newsList.innerHTML = newsHTML + newsHTML;
+            newsList.classList.add('animate-scroll');
         }
-        
-        function loadStream() {
-            loadingText.textContent = "Conectando...";
-            loadingText.classList.remove('text-red-400');
-            videoOverlay.classList.remove('opacity-0');
+
+        // --- LÓGICA DE REPRODUCTORES ---
+        const players = [];
+
+        function initializePlayer(config) {
+            const player = document.getElementById(config.playerId);
+            const playPauseBtn = document.getElementById(config.playPauseBtnId);
+            const playIcon = document.getElementById(config.playIconId);
+            const pauseIcon = document.getElementById(config.pauseIconId);
+            const volumeControl = document.getElementById(config.volumeControlId);
+            const videoOverlay = document.getElementById(config.videoOverlayId);
+            const loadingText = document.getElementById(config.loadingTextId);
+            const playerLogo = document.getElementById(config.playerLogoId);
+            const currentTimeEl = document.getElementById(config.currentTimeId);
+            const totalTimeEl = document.getElementById(config.totalTimeId);
+
+            let elapsedTimeInterval = null;
+            let secondsElapsed = 0;
             
-            player.src = "";
-            player.src = STREAM_URL;
-            player.load();
-            player.play()
-                .then(() => {
-                    videoOverlay.classList.add('opacity-0');
-                    setPlayState(true);
-                })
-                .catch(error => {
-                    console.error("Error en Promise de Play:", error);
-                    setPlayState(false); 
+            players.push(player);
+
+            function formatTime(totalSeconds) {
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`.replace(/^00:/, '');
+            }
+
+            function updateClock() {
+                if (totalTimeEl) {
+                    const now = new Date();
+                    totalTimeEl.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                }
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            function setPlayState(isPlaying) {
+                playIcon.classList.toggle('hidden', isPlaying);
+                pauseIcon.classList.toggle('hidden', !isPlaying);
+            }
+
+            function loadStream() {
+                loadingText.textContent = "Conectando...";
+                videoOverlay.classList.remove('opacity-0');
+                player.src = "";
+                player.src = config.streamUrl;
+                player.load();
+                player.play().catch(e => console.error(`Error al iniciar stream para ${config.playerId}:`, e));
+            }
+
+            playPauseBtn.addEventListener('click', () => {
+                if (player.paused) {
+                    loadStream();
+                } else {
+                    player.pause();
+                }
+            });
+
+            player.addEventListener('play', () => {
+                players.forEach(p => {
+                    if (p !== player && !p.paused) {
+                        p.pause();
+                    }
                 });
+                videoOverlay.classList.add('opacity-0');
+                setPlayState(true);
+                playerLogo.classList.add('logo-playing');
+                secondsElapsed = 0;
+                currentTimeEl.textContent = '00:00';
+                if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
+                elapsedTimeInterval = setInterval(() => {
+                    secondsElapsed++;
+                    currentTimeEl.textContent = formatTime(secondsElapsed);
+                }, 1000);
+            });
+
+            player.addEventListener('pause', () => {
+                setPlayState(false);
+                playerLogo.classList.remove('logo-playing');
+                if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
+            });
+            
+            player.addEventListener('error', (e) => {
+                console.error(`Error de audio para ${config.playerId}:`, player.error);
+                loadingText.innerHTML = `<span class="text-red-400">Error de Conexión</span>`;
+                videoOverlay.classList.remove('opacity-0');
+                setPlayState(false);
+                playerLogo.classList.remove('logo-playing');
+                if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
+                currentTimeEl.textContent = '--:--';
+            });
+            
+            volumeControl.addEventListener('input', (e) => { player.volume = e.target.value / 100; });
+            loadingText.textContent = "Haz clic para escuchar";
         }
-
-        playPauseBtn.addEventListener('click', () => player.paused ? loadStream() : player.pause());
-
-        player.addEventListener('play', () => { 
-            videoOverlay.classList.add('opacity-0'); 
-            setPlayState(true); 
-            secondsElapsed = 0;
-            document.getElementById('current-time').textContent = '00:00';
-            if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
-            elapsedTimeInterval = setInterval(() => {
-                secondsElapsed++;
-                document.getElementById('current-time').textContent = formatTime(secondsElapsed);
-            }, 1000);
-        });
-        
-        player.addEventListener('pause', () => {
-            setPlayState(false);
-            if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
-        });
-
-        player.addEventListener('waiting', () => { loadingText.textContent = "Cargando..."; videoOverlay.classList.remove('opacity-0'); });
-        player.addEventListener('playing', () => { videoOverlay.classList.add('opacity-0'); });
-        volumeControl.addEventListener('input', (e) => { player.volume = e.target.value / 100; });
-        
-        player.addEventListener('error', (e) => {
-            console.error("Error de audio:", player.error);
-            loadingText.innerHTML = `
-                <span class="text-red-400">Error de Conexión</span>
-                <span class="text-sm text-slate-400 mt-2 block">La radio podría estar fuera de línea o no permite reproductores web.</span>
-            `;
-            videoOverlay.classList.remove('opacity-0');
-            setPlayState(false);
-            if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
-            document.getElementById('current-time').textContent = '--:--';
-        });
 
         window.addEventListener('DOMContentLoaded', () => {
-            videoOverlay.classList.remove('opacity-0');
-            loadingText.textContent = "Haz clic en play para escuchar";
-            updateClock();
-            setInterval(updateClock, 1000);
+            initializePlayer({
+                playerId: 'player-1', playPauseBtnId: 'play-pause-btn-1', playIconId: 'play-icon-1', pauseIconId: 'pause-icon-1',
+                volumeControlId: 'volume-control-1', videoOverlayId: 'video-overlay-1', loadingTextId: 'loading-text-1',
+                playerLogoId: 'player-logo-1', currentTimeId: 'current-time-1', totalTimeId: 'total-time-1',
+                streamUrl: "https://laradiossl.online:10567/;"
+            });
             
+            initializePlayer({
+                playerId: 'player-2', playPauseBtnId: 'play-pause-btn-2', playIconId: 'play-icon-2', pauseIconId: 'pause-icon-2',
+                volumeControlId: 'volume-control-2', videoOverlayId: 'video-overlay-2', loadingTextId: 'loading-text-2',
+                playerLogoId: 'player-logo-2', currentTimeId: 'current-time-2', totalTimeId: 'total-time-2',
+                streamUrl: "https://laradiossl.online:10485/"
+            });
+
             populateNews();
         });
     </script>
