@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>Kebuenaqro</title>
     <meta name="theme-color" content="#c2410c"/>
     <meta name="description" content="Reproductor de streaming de Kebuenaqro.">
@@ -44,9 +44,13 @@
 </head>
 <body class="bg-slate-900 text-slate-200 flex items-center justify-center min-h-screen font-sans antialiased p-4">
 
-    <!-- CAMBIO: Contenedor principal más ancho -->
     <div class="w-full max-w-5xl mx-auto">
-        <!-- CAMBIO: Contenedor flex para los reproductores -->
+        <div class="mb-8 w-full overflow-hidden rounded-lg border border-orange-700/50 bg-black/20">
+            <div id="banner-list" class="flex transition-transform duration-700 ease-in-out">
+                <!-- Los banners se insertarán aquí dinámicamente -->
+            </div>
+        </div>
+
         <div class="flex flex-col md:flex-row justify-center gap-8">
             
             <!-- === REPRODUCTOR 1: KEBUENA CADEREYTA === -->
@@ -120,7 +124,6 @@
             </div>
         </div>
         
-        <!-- Contenedor de Noticias y Banner de Instalación (ahora debajo de los reproductores) -->
         <div class="mt-8">
             <div class="bg-orange-800/80 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden border border-orange-700">
                 <div id="news-ticker-container" class="whitespace-nowrap">
@@ -197,6 +200,34 @@
             });
             newsList.innerHTML = newsHTML + newsHTML;
             newsList.classList.add('animate-scroll');
+        }
+        
+        function populateBanners() {
+            const bannerImages = [
+                'banner1.jpeg', 'banner2.jpeg', 'banner3.jpeg', 'banner4.jpeg', 'banner5.jpeg'
+            ];
+            const baseUrl = 'https://fantasma-beep.github.io/kebuenaqro/';
+            const bannerList = document.getElementById('banner-list');
+            if (!bannerList) return;
+
+            let bannerHTML = '';
+            bannerImages.forEach(imgFile => {
+                const imgUrl = `${baseUrl}${imgFile}`;
+                // CAMBIO: Se usa object-contain para que la imagen se vea completa
+                bannerHTML += `<div class="w-full flex-shrink-0 bg-black flex justify-center items-center h-48"><img src="${imgUrl}" alt="Banner" class="w-auto h-full object-contain"></div>`;
+            });
+
+            bannerList.innerHTML = bannerHTML;
+            
+            let currentBanner = 0;
+            const totalBanners = bannerImages.length;
+
+            if (totalBanners > 1) {
+                setInterval(() => {
+                    currentBanner = (currentBanner + 1) % totalBanners;
+                    bannerList.style.transform = `translateX(-${currentBanner * 100}%)`;
+                }, 5000);
+            }
         }
 
         // --- LÓGICA DE REPRODUCTORES ---
@@ -311,6 +342,7 @@
             });
 
             populateNews();
+            populateBanners();
         });
     </script>
 </body>
