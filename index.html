@@ -33,6 +33,8 @@
             animation: scroll 60s linear infinite; 
         }
 
+        /* --- CAMBIO: Se elimina la animación de rotación del logo --- */
+        /*
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -40,6 +42,7 @@
         .logo-playing {
             animation: spin 15s linear infinite;
         }
+        */
     </style>
 </head>
 <body class="bg-slate-900 text-slate-200 flex items-center justify-center min-h-screen font-sans antialiased p-4">
@@ -408,6 +411,7 @@
                 playerId: 'player-2', playPauseBtnId: 'play-pause-btn-2', playIconId: 'play-icon-2', pauseIconId: 'pause-icon-2',
                 volumeControlId: 'volume-control-2', videoOverlayId: 'video-overlay-2', loadingTextId: 'loading-text-2',
                 playerLogoId: 'player-logo-2', currentTimeId: 'current-time-2', totalTimeId: 'total-time-2',
+                // CAMBIO: Se agrega un ";" al final de la URL, que es un formato común.
                 streamUrl: "https://laradiossl.online:10485/;"
             });
 
