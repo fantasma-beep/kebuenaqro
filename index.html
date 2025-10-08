@@ -41,7 +41,6 @@
             animation: spin 15s linear infinite;
         }
 
-        /* --- NUEVO: Estilos para la pantalla de inicio (Splash Screen) --- */
         #splash-screen {
             transition: opacity 0.5s ease-out;
         }
@@ -49,9 +48,7 @@
 </head>
 <body class="bg-slate-900 text-slate-200 flex items-center justify-center min-h-screen font-sans antialiased p-4">
 
-    <!-- === NUEVO: PANTALLA DE INICIO (SPLASH SCREEN) === -->
     <div id="splash-screen" class="fixed inset-0 bg-slate-900 flex flex-col justify-center items-center z-50">
-        <!-- Asegúrate de subir tu logo a GitHub con el nombre 'logo-ke-buena-web.png' -->
         <img src="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png" alt="Logo Kebuena" class="w-64">
         <p class="text-2xl font-bold text-white mt-4">Kebuena Querétaro</p>
     </div>
@@ -375,6 +372,23 @@
 
 
         window.addEventListener('DOMContentLoaded', () => {
+            
+            // --- CORRECCIÓN: Se agrega la lógica de la pantalla de inicio ---
+            const splashScreen = document.getElementById('splash-screen');
+            const mainContent = document.getElementById('main-content');
+
+            setTimeout(() => {
+                if(splashScreen) {
+                    splashScreen.classList.add('opacity-0');
+                    setTimeout(() => {
+                        splashScreen.classList.add('hidden');
+                    }, 500); // Coincide con la duración de la transición
+                }
+                if(mainContent) {
+                    mainContent.classList.remove('opacity-0');
+                }
+            }, 2000); // Muestra la pantalla de inicio por 2 segundos
+
             initializePlayer({
                 playerId: 'player-1', playPauseBtnId: 'play-pause-btn-1', playIconId: 'play-icon-1', pauseIconId: 'pause-icon-1',
                 volumeControlId: 'volume-control-1', videoOverlayId: 'video-overlay-1', loadingTextId: 'loading-text-1',
