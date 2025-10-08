@@ -9,7 +9,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="" id="manifest-link">
-    <link rel="apple-touch-icon" href="https://fantasma-beep.github.io/kebuenaqro/logotipo2.png?v=3">
+    <link rel="apple-touch-icon" href="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6">
 
     <style>
         body {
@@ -33,14 +33,6 @@
             animation: scroll 60s linear infinite; 
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .logo-playing {
-            animation: spin 15s linear infinite;
-        }
-
         #splash-screen {
             transition: opacity 0.5s ease-out;
         }
@@ -49,7 +41,7 @@
 <body class="bg-slate-900 text-slate-200 flex items-center justify-center min-h-screen font-sans antialiased p-4">
 
     <div id="splash-screen" class="fixed inset-0 bg-slate-900 flex flex-col justify-center items-center z-50">
-        <img src="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png" alt="Logo Kebuena" class="w-64">
+        <img src="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6" alt="Logo Kebuena" class="w-64">
         <p class="text-2xl font-bold text-white mt-4">Kebuena Querétaro</p>
     </div>
 
@@ -65,7 +57,7 @@
             <!-- === REPRODUCTOR 1: KEBUENA CADEREYTA === -->
             <div class="w-full max-w-md bg-orange-700 rounded-2xl shadow-2xl overflow-hidden border border-orange-800">
                 <div class="aspect-video bg-white flex items-center justify-center relative group">
-                    <img id="player-logo-1" src="https://fantasma-beep.github.io/kebuenaqro/logo.png?v=2" alt="Kebuenaqro Logo Original" class="w-52 h-52 object-contain rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/208x208/1e293b/f97316?text=Logo';">
+                    <img id="player-logo-1" src="https://fantasma-beep.github.io/kebuenaqro/logo.png?v=4" alt="Kebuenaqro Logo Original" class="w-52 h-52 object-contain rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/208x208/1e293b/f97316?text=Logo';">
                     <audio id="player-1" class="w-full h-full hidden" crossOrigin="anonymous"></audio>
                     <div id="video-overlay-1" class="absolute inset-0 bg-orange-800/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-4 transition-opacity duration-300">
                         <h2 id="loading-text-1" class="text-xl font-bold text-white">Cargando streaming...</h2>
@@ -111,7 +103,7 @@
             <!-- === REPRODUCTOR 2: KEBUENA JALPAN === -->
             <div class="w-full max-w-md bg-orange-700 rounded-2xl shadow-2xl overflow-hidden border border-orange-800">
                 <div class="aspect-video bg-white flex items-center justify-center relative group">
-                    <img id="player-logo-2" src="https://fantasma-beep.github.io/kebuenaqro/logotipo2.png?v=3" alt="Kebuenaqro Logo" class="w-52 h-52 object-contain rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/208x208/1e293b/f97316?text=Logo';">
+                    <img id="player-logo-2" src="https://fantasma-beep.github.io/kebuenaqro/logotipo5.png?v=7" alt="Kebuenaqro Logo" class="w-52 h-52 object-contain rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/208x208/1e293b/f97316?text=Logo';">
                     <audio id="player-2" class="w-full h-full hidden" crossOrigin="anonymous"></audio>
                     <div id="video-overlay-2" class="absolute inset-0 bg-orange-800/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-4 transition-opacity duration-300">
                         <h2 id="loading-text-2" class="text-xl font-bold text-white">Cargando streaming...</h2>
@@ -186,7 +178,7 @@
         const manifest = {
             "name": "Kebuenaqro", "short_name": "Kebuenaqro", "start_url": ".", "display": "standalone",
             "background_color": "#1e293b", "theme_color": "#c2410c", "description": "Reproductor de Kebuenaqro.",
-            "icons": [{"src": "https://fantasma-beep.github.io/kebuenaqro/logotipo2.png?v=3", "type": "image/png", "sizes": "192x192"}, {"src": "https://fantasma-beep.github.io/kebuenaqro/logotipo2.png?v=3", "type": "image/png", "sizes": "512x512"}]
+            "icons": [{"src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6", "type": "image/png", "sizes": "192x192"}, {"src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6", "type": "image/png", "sizes": "512x512"}]
         };
         const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
         document.getElementById('manifest-link').setAttribute('href', URL.createObjectURL(manifestBlob));
@@ -313,7 +305,6 @@
                 });
                 videoOverlay.classList.add('opacity-0');
                 setPlayState(true);
-                // CAMBIO: Se elimina la lógica de la animación del logo
                 secondsElapsed = 0;
                 currentTimeEl.textContent = '00:00';
                 if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
@@ -325,16 +316,14 @@
 
             player.addEventListener('pause', () => {
                 setPlayState(false);
-                // CAMBIO: Se elimina la lógica de la animación del logo
                 if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
             });
             
             player.addEventListener('error', (e) => {
                 console.error(`Error de audio para ${config.playerId}:`, player.error);
-                loadingText.innerHTML = `<span class="text-red-400">Error de Conexión</span>`;
+                loadingText.innerHTML = `<span class="text-red-400">Error en ${config.stationName}</span>`;
                 videoOverlay.classList.remove('opacity-0');
                 setPlayState(false);
-                // CAMBIO: Se elimina la lógica de la animación del logo
                 if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
                 currentTimeEl.textContent = '--:--';
             });
@@ -373,7 +362,6 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             
-            // --- CORRECCIÓN: Se agrega la lógica de la pantalla de inicio ---
             const splashScreen = document.getElementById('splash-screen');
             const mainContent = document.getElementById('main-content');
 
@@ -382,14 +370,15 @@
                     splashScreen.classList.add('opacity-0');
                     setTimeout(() => {
                         splashScreen.classList.add('hidden');
-                    }, 500); // Coincide con la duración de la transición
+                    }, 500); 
                 }
                 if(mainContent) {
                     mainContent.classList.remove('opacity-0');
                 }
-            }, 2000); // Muestra la pantalla de inicio por 2 segundos
+            }, 2000); 
 
             initializePlayer({
+                stationName: 'Kebuena Cadereyta',
                 playerId: 'player-1', playPauseBtnId: 'play-pause-btn-1', playIconId: 'play-icon-1', pauseIconId: 'pause-icon-1',
                 volumeControlId: 'volume-control-1', videoOverlayId: 'video-overlay-1', loadingTextId: 'loading-text-1',
                 playerLogoId: 'player-logo-1', currentTimeId: 'current-time-1', totalTimeId: 'total-time-1',
@@ -397,10 +386,12 @@
             });
             
             initializePlayer({
+                stationName: 'Kebuena Jalpan',
                 playerId: 'player-2', playPauseBtnId: 'play-pause-btn-2', playIconId: 'play-icon-2', pauseIconId: 'pause-icon-2',
                 volumeControlId: 'volume-control-2', videoOverlayId: 'video-overlay-2', loadingTextId: 'loading-text-2',
                 playerLogoId: 'player-logo-2', currentTimeId: 'current-time-2', totalTimeId: 'total-time-2',
-                streamUrl: "https://laradiossl.online:10485/"
+                // CAMBIO: Se ajusta la URL para la prueba
+                streamUrl: "https://laradiossl.online:10485/;"
             });
 
             populateNews();
