@@ -33,8 +33,6 @@
             animation: scroll 60s linear infinite; 
         }
 
-        /* --- CAMBIO: Se elimina la animación de rotación del logo --- */
-        /*
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -42,12 +40,23 @@
         .logo-playing {
             animation: spin 15s linear infinite;
         }
-        */
+
+        /* --- NUEVO: Estilos para la pantalla de inicio (Splash Screen) --- */
+        #splash-screen {
+            transition: opacity 0.5s ease-out;
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-200 flex items-center justify-center min-h-screen font-sans antialiased p-4">
 
-    <div class="w-full max-w-5xl mx-auto">
+    <!-- === NUEVO: PANTALLA DE INICIO (SPLASH SCREEN) === -->
+    <div id="splash-screen" class="fixed inset-0 bg-slate-900 flex flex-col justify-center items-center z-50">
+        <!-- Asegúrate de subir tu logo a GitHub con el nombre 'logo-ke-buena-web.png' -->
+        <img src="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png" alt="Logo Kebuena" class="w-64">
+        <p class="text-2xl font-bold text-white mt-4">Kebuena Querétaro</p>
+    </div>
+
+    <div id="main-content" class="w-full max-w-5xl mx-auto opacity-0 transition-opacity duration-500">
         <div class="mb-8 w-full overflow-hidden rounded-lg border border-orange-700/50 bg-black/20">
             <div id="banner-list" class="flex transition-transform duration-700 ease-in-out">
                 <!-- Los banners se insertarán aquí dinámicamente -->
@@ -176,12 +185,7 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        // --- LÓGICA DE LA APLICACIÓN ---
-
+    <script>
         const manifest = {
             "name": "Kebuenaqro", "short_name": "Kebuenaqro", "start_url": ".", "display": "standalone",
             "background_color": "#1e293b", "theme_color": "#c2410c", "description": "Reproductor de Kebuenaqro.",
@@ -197,36 +201,9 @@
         const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isAppInstalled = () => window.matchMedia('(display-mode: standalone)').matches;
 
-        // --- Lógica para el contador de instalaciones con Firebase ---
-        let db;
-        try {
-            const firebaseConfig = {
-                // ESTA ES UNA CONFIGURACIÓN DE EJEMPLO - NO FUNCIONARÁ
-                apiKey: "AIza...",
-                authDomain: "...",
-                projectId: "...",
-            };
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-        } catch (e) {
-            console.warn("Firebase no está configurado. El contador de instalaciones no funcionará.");
-        }
-
-        window.addEventListener('appinstalled', async (e) => {
+        window.addEventListener('appinstalled', (e) => {
             console.log('PWA fue instalada.');
             installBtn.classList.add('hidden');
-            if(db) {
-                try {
-                    const analyticsCollection = collection(db, 'installs');
-                    await addDoc(analyticsCollection, {
-                        installedAt: Timestamp.now(),
-                        userAgent: navigator.userAgent
-                    });
-                    console.log("Instalación registrada en Firebase.");
-                } catch (error) {
-                    console.error("Error al registrar la instalación:", error);
-                }
-            }
         });
 
 
@@ -339,7 +316,7 @@
                 });
                 videoOverlay.classList.add('opacity-0');
                 setPlayState(true);
-                playerLogo.classList.add('logo-playing');
+                // CAMBIO: Se elimina la lógica de la animación del logo
                 secondsElapsed = 0;
                 currentTimeEl.textContent = '00:00';
                 if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
@@ -351,16 +328,16 @@
 
             player.addEventListener('pause', () => {
                 setPlayState(false);
-                playerLogo.classList.remove('logo-playing');
+                // CAMBIO: Se elimina la lógica de la animación del logo
                 if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
             });
             
             player.addEventListener('error', (e) => {
                 console.error(`Error de audio para ${config.playerId}:`, player.error);
-                loadingText.innerHTML = `<span class="text-red-400">Error en ${config.stationName}</span>`;
+                loadingText.innerHTML = `<span class="text-red-400">Error de Conexión</span>`;
                 videoOverlay.classList.remove('opacity-0');
                 setPlayState(false);
-                playerLogo.classList.remove('logo-playing');
+                // CAMBIO: Se elimina la lógica de la animación del logo
                 if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
                 currentTimeEl.textContent = '--:--';
             });
@@ -399,7 +376,6 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             initializePlayer({
-                stationName: 'Kebuena Cadereyta',
                 playerId: 'player-1', playPauseBtnId: 'play-pause-btn-1', playIconId: 'play-icon-1', pauseIconId: 'pause-icon-1',
                 volumeControlId: 'volume-control-1', videoOverlayId: 'video-overlay-1', loadingTextId: 'loading-text-1',
                 playerLogoId: 'player-logo-1', currentTimeId: 'current-time-1', totalTimeId: 'total-time-1',
@@ -407,12 +383,10 @@
             });
             
             initializePlayer({
-                stationName: 'Kebuena Jalpan',
                 playerId: 'player-2', playPauseBtnId: 'play-pause-btn-2', playIconId: 'play-icon-2', pauseIconId: 'pause-icon-2',
                 volumeControlId: 'volume-control-2', videoOverlayId: 'video-overlay-2', loadingTextId: 'loading-text-2',
                 playerLogoId: 'player-logo-2', currentTimeId: 'current-time-2', totalTimeId: 'total-time-2',
-                // CAMBIO: Se agrega un ";" al final de la URL, que es un formato común.
-                streamUrl: "https://laradiossl.online:10485/;"
+                streamUrl: "https://laradiossl.online:10485/"
             });
 
             populateNews();
