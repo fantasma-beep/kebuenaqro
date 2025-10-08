@@ -354,7 +354,7 @@
             
             player.addEventListener('error', (e) => {
                 console.error(`Error de audio para ${config.playerId}:`, player.error);
-                loadingText.innerHTML = `<span class="text-red-400">Error de Conexión</span>`;
+                loadingText.innerHTML = `<span class="text-red-400">Error en ${config.stationName}</span>`;
                 videoOverlay.classList.remove('opacity-0');
                 setPlayState(false);
                 playerLogo.classList.remove('logo-playing');
@@ -396,6 +396,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             initializePlayer({
+                stationName: 'Kebuena Cadereyta',
                 playerId: 'player-1', playPauseBtnId: 'play-pause-btn-1', playIconId: 'play-icon-1', pauseIconId: 'pause-icon-1',
                 volumeControlId: 'volume-control-1', videoOverlayId: 'video-overlay-1', loadingTextId: 'loading-text-1',
                 playerLogoId: 'player-logo-1', currentTimeId: 'current-time-1', totalTimeId: 'total-time-1',
@@ -403,10 +404,11 @@
             });
             
             initializePlayer({
+                stationName: 'Kebuena Jalpan',
                 playerId: 'player-2', playPauseBtnId: 'play-pause-btn-2', playIconId: 'play-icon-2', pauseIconId: 'pause-icon-2',
                 volumeControlId: 'volume-control-2', videoOverlayId: 'video-overlay-2', loadingTextId: 'loading-text-2',
                 playerLogoId: 'player-logo-2', currentTimeId: 'current-time-2', totalTimeId: 'total-time-2',
-                streamUrl: "https://laradiossl.online:10485/"
+                streamUrl: "https://laradiossl.online:10485/;"
             });
 
             populateNews();
