@@ -182,6 +182,7 @@
     </div>
 
     <script>
+        // --- INICIO: LÓGICA DE PWA (MANIFEST) ---
         const manifest = {
             "name": "Kebuenaqro", "short_name": "Kebuenaqro", "start_url": ".", "display": "standalone",
             "background_color": "#1e293b", "theme_color": "#c2410c", "description": "Reproductor de Kebuenaqro.",
@@ -190,6 +191,8 @@
         const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
         document.getElementById('manifest-link').setAttribute('href', URL.createObjectURL(manifestBlob));
         
+        // --- FIN: LÓGICA DE PWA ---
+
         const installBtn = document.getElementById('install-btn');
         const iosInstallBanner = document.getElementById('ios-install-banner');
         let deferredPrompt;
