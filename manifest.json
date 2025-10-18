@@ -1,23 +1,35 @@
 {
-"name": "Kebuenaqro",
-"short_name": "Kebuenaqro",
-"start_url": ".",
-"display": "standalone",
-"background_color": "#1e293b",
-"theme_color": "#c2410c",
-"description": "Reproductor de Kebuenaqro.",
-"icons": [
-{
-"src": "https://www.google.com/search?q=https://placehold.co/192x192/c2410c/FFFFFF%3Ftext%3DKebuena",
-"type": "image/png",
-"sizes": "192x192",
-"purpose": "any maskable"
-},
-{
-"src": "https://www.google.com/search?q=https://placehold.co/512x512/c2410c/FFFFFF%3Ftext%3DKebuena",
-"type": "image/png",
-"sizes": "512x512",
-"purpose": "any maskable"
-}
-]
+  "name": "Kebuenaqro",
+  "short_name": "Kebuenaqro",
+  "description": "Reproductor de streaming de Kebuenaqro.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#c2410c",
+  "icons": [
+    {
+      "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }
