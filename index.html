@@ -7,16 +7,18 @@
     <meta name="theme-color" content="#c2410c"/>
     <meta name="description" content="Reproductor de streaming de Kebuenaqro.">
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6">
+    <link rel="icon" href="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6">
     <style>
         body {
+            /* Sin la imagen de fondo 404 */
             background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98));
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
-        /* ... (el resto de tu CSS va aquí) ... */
         input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;width:100%}
         input[type=range]:focus{outline:none}
         input[type=range]::-webkit-slider-runnable-track{background-color:#9a3412;border-radius:.5rem;height:.5rem}
@@ -138,11 +140,11 @@
     </div>
 
     <script>
-        // --- INICIO: LÓGICA DE PWA (v7) ---
+        // --- INICIO: LÓGICA DE PWA (v9) ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW v7 registrado exitosamente.')) // <-- Actualizado a v7
+                    .then(reg => console.log('SW v9 registrado exitosamente.')) // <-- Actualizado a v9
                     .catch(err => console.error('Error al registrar SW:', err));
             });
         }
