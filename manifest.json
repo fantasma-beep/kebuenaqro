@@ -10,26 +10,12 @@
     {
       "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/png"
     },
     {
       "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/png"
     }
   ]
 }
