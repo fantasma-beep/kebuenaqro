@@ -1,10 +1,10 @@
-// v9: Actualización de caché para el nuevo manifest v9.
-const CACHE_NAME = 'kebuenaqro-cache-v9'; // <-- Versión 9
+// v10: Actualización de caché para el nuevo manifest v10.
+const CACHE_NAME = 'kebuenaqro-cache-v10'; // <-- Versión 10
 
 // Archivos locales (el "cascarón" de la app)
 const urlsToCache = [
   './', // index.html
-  './manifest.json', // El nuevo manifest v9
+  './manifest.json', // El nuevo manifest v10
   'https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6',
   'https://fantasma-beep.github.io/kebuenaqro/logo.png?v=4',
   'https://fantasma-beep.github.io/kebuenaqro/logotipo5.png?v=7'
@@ -12,7 +12,7 @@ const urlsToCache = [
 
 // Evento 'install': Guarda los archivos uno por uno
 self.addEventListener('install', event => {
-  console.log('SW: Instalando v9...');
+  console.log('SW: Instalando v10...');
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
       console.log('SW: Cacheando app shell (uno por uno)...');
@@ -32,14 +32,14 @@ self.addEventListener('install', event => {
   );
 });
 
-// Evento 'activate': Limpia los cachés viejos (v1-v8)
+// Evento 'activate': Limpia los cachés viejos (v1-v9)
 self.addEventListener('activate', event => {
-  console.log('SW: Activado v9');
+  console.log('SW: Activado v10');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) { // <-- Compara con v9
+          if (cacheName !== CACHE_NAME) { // <-- Compara con v10
             console.log('SW: Borrando caché viejo:', cacheName);
             return caches.delete(cacheName);
           }
