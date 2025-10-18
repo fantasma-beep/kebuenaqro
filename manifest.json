@@ -3,9 +3,9 @@
 "short_name": "Kebuenaqro",
 "start_url": ".",
 "display": "standalone",
-"background_color": "#1e293b",
+"background_color": "#1e2b3b",
 "theme_color": "#c2410c",
-"description": "Reproductor de Kebuenaqro.",
+"description": "Reproductor de Kebenaqro.",
 "icons": [
 {
 "src": "https://www.google.com/search?q=https://placehold.co/192x192/c2410c/FFFFFF%3Ftext%3DKebuena",
