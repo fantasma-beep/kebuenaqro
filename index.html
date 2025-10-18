@@ -8,7 +8,8 @@
     <meta name="description" content="Reproductor de streaming de Kebuenaqro.">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="manifest" href="" id="manifest-link">
+    <!-- Enlace al archivo manifest.json físico -->
+    <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6">
 
     <style>
@@ -37,11 +38,10 @@
             transition: opacity 0.5s ease-out;
         }
         
-        /* Estilo para ajustar las imágenes del banner */
         #banner-list img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Cambiado a 'contain' para que la imagen se vea completa */
+            object-fit: contain;
         }
     </style>
 </head>
@@ -182,15 +182,20 @@
     </div>
 
     <script>
-        // --- INICIO: LÓGICA DE PWA (MANIFEST) ---
-        const manifest = {
-            "name": "Kebuenaqro", "short_name": "Kebuenaqro", "start_url": ".", "display": "standalone",
-            "background_color": "#1e293b", "theme_color": "#c2410c", "description": "Reproductor de Kebuenaqro.",
-            "icons": [{"src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6", "type": "image/png", "sizes": "192x192"}, {"src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6", "type": "image/png", "sizes": "512x512"}]
-        };
-        const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-        document.getElementById('manifest-link').setAttribute('href', URL.createObjectURL(manifestBlob));
+        // --- INICIO: LÓGICA DE PWA ---
         
+        // Registrar el Service Worker, pero solo en un entorno de servidor real (http o https)
+        if ('serviceWorker' in navigator && (location.protocol === 'http:' || location.protocol === 'https:')) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('Service Worker registrado con éxito:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.error('Error al registrar el Service Worker:', error);
+                    });
+            });
+        }
         // --- FIN: LÓGICA DE PWA ---
 
         const installBtn = document.getElementById('install-btn');
