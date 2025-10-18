@@ -11,9 +11,11 @@
     
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6">
+
     <style>
         body {
-            background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98)), url('https://fantasma-beep.github.io/kebuenaqro/494615713_1348055410294820_9029691649736311255_n.jpg');
+            /* === CAMBIO v5: Se quita la imagen de fondo que daba error 404 === */
+            background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98));
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -140,17 +142,15 @@
     </div>
 
     <script>
-        // --- INICIO: LÓGICA DE PWA (CORREGIDA) ---
-        // Se registra el nuevo Service Worker 'sw.js'
+        // --- INICIO: LÓGICA DE PWA (v5) ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW v3 registrado exitosamente.'))
+                    .then(reg => console.log('SW v5 registrado exitosamente.')) // <-- Actualizado a v5
                     .catch(err => console.error('Error al registrar SW:', err));
             });
         }
         
-        // El resto de la lógica PWA original (estaba bien)
         const installBtn = document.getElementById('install-btn');
         const iosInstallBanner = document.getElementById('ios-install-banner');
         let deferredPrompt;
@@ -166,6 +166,7 @@
          if (isAppInstalled()) return;
          e.preventDefault();
          deferredPrompt = e;
+         // Mostrar el botón en Android
          if (isAndroid()) {
            installBtn.classList.remove('hidden');
          }
@@ -177,6 +178,7 @@
          }
         });
         
+        // Mostrar banner de iOS
         if (isIOS() && !isAppInstalled()) {
            iosInstallBanner.classList.remove('hidden');
         }
@@ -207,7 +209,7 @@
             populateBanners();
         });
 
-        // Función para Banners
+        // (El resto de tus funciones: populateBanners, initializePlayer, populateNews van aquí...)
         function populateBanners() {
             const bannerImages = ['banner1.jpeg', 'banner2.jpeg', 'banner3.jpeg', 'banner4.jpeg', 'banner5.jpeg', 'banner8.jpeg'];
             const baseUrl = 'https://fantasma-beep.github.io/kebuenaqro/';
@@ -227,7 +229,6 @@
             }
         }
         
-        // Lógica de Reproductores
         const players = [];
         function initializePlayer(config) {
             const player = document.getElementById(config.playerId);
@@ -291,7 +292,6 @@
             loadingText.textContent = "Haz clic para escuchar";
         }
         
-        // Función para Noticias
         function populateNews() {
             const newsList = document.getElementById('news-list');
             if (!newsList) return;
