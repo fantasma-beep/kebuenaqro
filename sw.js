@@ -1,6 +1,6 @@
-// v4: Un service worker más robusto que no falla si falta un archivo.
+// v5: Se elimina la imagen de fondo que daba 404.
 
-const CACHE_NAME = 'kebuenaqro-cache-v4';
+const CACHE_NAME = 'kebuenaqro-cache-v5'; // <-- Versión 5
 
 // Archivos locales (el "cascarón" de la app)
 const urlsToCache = [
@@ -8,13 +8,13 @@ const urlsToCache = [
   './manifest.json',
   'https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6',
   'https://fantasma-beep.github.io/kebuenaqro/logo.png?v=4',
-  'https://fantasma-beep.github.io/kebuenaqro/logotipo5.png?v=7',
-  'https://fantasma-beep.github.io/kebuenaqro/494615713_1348055410294820_9029691649736311255_n.jpg'
+  'https://fantasma-beep.github.io/kebuenaqro/logotipo5.png?v=7'
+  // SE ELIMINÓ LA IMAGEN ROTA (404) DE ESTA LISTA
 ];
 
 // Evento 'install': Guarda los archivos uno por uno
 self.addEventListener('install', event => {
-  console.log('SW: Instalando v4 (más seguro)...');
+  console.log('SW: Instalando v5...');
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
       console.log('SW: Cacheando app shell (uno por uno)...');
@@ -25,11 +25,9 @@ self.addEventListener('install', event => {
           if (response.ok) {
             await cache.put(url, response);
           } else {
-            // Si el archivo no existe (404), solo avisa en la consola
             console.warn(`SW: Falló al cachear ${url} - Status: ${response.status}`);
           }
         } catch (err) {
-          // Si hay un error de red, solo avisa y continúa
           console.error(`SW: Error de fetch al cachear ${url}:`, err);
         }
       }
@@ -37,14 +35,14 @@ self.addEventListener('install', event => {
   );
 });
 
-// Evento 'activate': Limpia los cachés viejos (v1, v2, v3)
+// Evento 'activate': Limpia los cachés viejos (v1, v2, v3, v4)
 self.addEventListener('activate', event => {
-  console.log('SW: Activado v4');
+  console.log('SW: Activado v5');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
+          if (cacheName !== CACHE_NAME) { // <-- Compara con v5
             console.log('SW: Borrando caché viejo:', cacheName);
             return caches.delete(cacheName);
           }
