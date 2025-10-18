@@ -1,26 +1,23 @@
-// v5: Se elimina la imagen de fondo que daba 404.
-
-const CACHE_NAME = 'kebuenaqro-cache-v5'; // <-- Versión 5
+// v7: Actualización de caché para el nuevo manifest v7.
+const CACHE_NAME = 'kebuenaqro-cache-v7'; // <-- Versión 7
 
 // Archivos locales (el "cascarón" de la app)
 const urlsToCache = [
   './', // index.html
-  './manifest.json',
+  './manifest.json', // El nuevo manifest v7
   'https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6',
   'https://fantasma-beep.github.io/kebuenaqro/logo.png?v=4',
   'https://fantasma-beep.github.io/kebuenaqro/logotipo5.png?v=7'
-  // SE ELIMINÓ LA IMAGEN ROTA (404) DE ESTA LISTA
 ];
 
 // Evento 'install': Guarda los archivos uno por uno
 self.addEventListener('install', event => {
-  console.log('SW: Instalando v5...');
+  console.log('SW: Instalando v7...');
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
       console.log('SW: Cacheando app shell (uno por uno)...');
       for (const url of urlsToCache) {
         try {
-          // Intenta descargar y guardar el archivo
           const response = await fetch(url);
           if (response.ok) {
             await cache.put(url, response);
@@ -31,18 +28,18 @@ self.addEventListener('install', event => {
           console.error(`SW: Error de fetch al cachear ${url}:`, err);
         }
       }
-    }).then(() => self.skipWaiting()) // Activa el SW inmediatamente
+    }).then(() => self.skipWaiting())
   );
 });
 
-// Evento 'activate': Limpia los cachés viejos (v1, v2, v3, v4)
+// Evento 'activate': Limpia los cachés viejos (v1-v6)
 self.addEventListener('activate', event => {
-  console.log('SW: Activado v5');
+  console.log('SW: Activado v7');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) { // <-- Compara con v5
+          if (cacheName !== CACHE_NAME) { // <-- Compara con v7
             console.log('SW: Borrando caché viejo:', cacheName);
             return caches.delete(cacheName);
           }
@@ -53,18 +50,13 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Evento 'fetch': Decide cómo responder a cada petición
+// Evento 'fetch':
 self.addEventListener('fetch', event => {
   const url = event.request.url;
-
-  // 1. Para streams, tailwind, o favicons: SIEMPRE ir a la red.
   if (url.includes('laradiossl.online') || url.includes('cdn.tailwindcss.com') || url.includes('favicon.ico')) {
     event.respondWith(fetch(event.request));
     return;
   }
-
-  // 2. Para todo lo demás (tus archivos locales):
-  // Intenta buscar en el caché primero. Si no está, ve a la red.
   event.respondWith(
     caches.match(event.request)
       .then(response => {
