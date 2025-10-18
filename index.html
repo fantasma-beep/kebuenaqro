@@ -1,169 +1,200 @@
 <script>
-        // --- INICIO: LÓGICA DE PWA (MODIFICADA) ---
+    // --- 1. REGISTRO DEL SERVICE WORKER ---
+    // Esto es seguro y puede ir afuera.
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('SW registrado exitosamente.'))
+                .catch(err => console.error('Error al registrar SW:', err));
+        });
+    }
+
+    // --- 2. DEFINICIONES DE FUNCIONES ---
+    // Definimos las funciones aquí, pero no las llamamos todavía.
+    
+    const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isAppInstalled = () => window.matchMedia('(display-mode: standalone)').matches;
+
+    function populateBanners() {
+        const bannerImages = ['banner1.jpeg', 'banner2.jpeg', 'banner3.jpeg', 'banner4.jpeg', 'banner5.jpeg', 'banner8.jpeg'];
+        const baseUrl = 'https://fantasma-beep.github.io/kebuenaqro/';
+        const bannerList = document.getElementById('banner-list');
+        if (!bannerList) return;
+        let bannerHTML = '';
+        bannerImages.forEach(imgFile => {
+            bannerHTML += `<div class="w-full flex-shrink-0 bg-black flex justify-center items-center h-48"><img src="${baseUrl}${imgFile}" alt="Banner"></div>`;
+        });
+        bannerList.innerHTML = bannerHTML;
+        let currentBanner = 0;
+        if (bannerImages.length > 1) {
+            setInterval(() => {
+                currentBanner = (currentBanner + 1) % bannerImages.length;
+                bannerList.style.transform = `translateX(-${currentBanner * 100}%)`;
+            }, 5000);
+        }
+    }
+
+    const players = [];
+    function initializePlayer(config) {
+        const player = document.getElementById(config.playerId);
+        // Comprobación de seguridad: si algún elemento no existe, no continuar
+        if (!player) {
+            console.error(`Error: No se encontró el elemento ${config.playerId}`);
+            return;
+        }
+        const playPauseBtn = document.getElementById(config.playPauseBtnId);
+        const playIcon = document.getElementById(config.playIconId);
+        const pauseIcon = document.getElementById(config.pauseIconId);
+        const volumeControl = document.getElementById(config.volumeControlId);
+        const videoOverlay = document.getElementById(config.videoOverlayId);
+        const loadingText = document.getElementById(config.loadingTextId);
+        const currentTimeEl = document.getElementById(config.currentTimeId);
+        const totalTimeEl = document.getElementById(config.totalTimeId);
         
-        // 1. Registro del Service Worker simplificado
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW registrado exitosamente.'))
-                    .catch(err => console.error('Error al registrar SW:', err));
-            });
+        // Si falta algún elemento crucial, no seguir
+        if (!playPauseBtn || !playIcon || !pauseIcon || !volumeControl || !videoOverlay || !loadingText || !currentTimeEl || !totalTimeEl) {
+            console.error(`Faltan elementos de UI para el reproductor ${config.playerId}`);
+            return;
         }
 
+        let elapsedTimeInterval = null;
+        let secondsElapsed = 0;
+        players.push(player);
+        
+        function formatTime(s) {
+            const hours = Math.floor(s / 3600); const minutes = Math.floor((s % 3600) / 60); const seconds = s % 60;
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`.replace(/^00:/, '');
+        }
+        function updateClock() {
+            const now = new Date();
+            totalTimeEl.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        }
+        setInterval(updateClock, 1000); updateClock();
+        
+        function setPlayState(isPlaying) {
+            playIcon.classList.toggle('hidden', isPlaying);
+            pauseIcon.classList.toggle('hidden', !isPlaying);
+        }
+        
+        playPauseBtn.addEventListener('click', () => {
+            if (player.paused) {
+                loadingText.textContent = "Conectando..."; videoOverlay.classList.remove('opacity-0');
+                player.src = ""; player.src = config.streamUrl; player.load();
+                player.play().catch(e => console.error('Error al iniciar stream:', e));
+            } else {
+                player.pause();
+            }
+        });
+        
+        player.addEventListener('play', () => {
+            players.forEach(p => { if (p !== player && !p.paused) p.pause(); });
+            videoOverlay.classList.add('opacity-0'); setPlayState(true); secondsElapsed = 0; currentTimeEl.textContent = '00:00';
+            if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
+            elapsedTimeInterval = setInterval(() => { secondsElapsed++; currentTimeEl.textContent = formatTime(secondsElapsed); }, 1000);
+        });
+        
+        player.addEventListener('pause', () => {
+            setPlayState(false); if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
+        });
+        
+        player.addEventListener('error', () => {
+            loadingText.innerHTML = `<span class="text-red-400">Error en ${config.stationName}</span>`;
+            videoOverlay.classList.remove('opacity-0'); setPlayState(false);
+            if (elapsedTimeInterval) clearInterval(elapsedTimeInterval); currentTimeEl.textContent = '--:--';
+        });
+        
+        volumeControl.addEventListener('input', (e) => { player.volume = e.target.value / 100; });
+        loadingText.textContent = "Haz clic para escuchar";
+    }
+
+    function populateNews() {
+        const newsList = document.getElementById('news-list');
+        if (!newsList) return;
+        const newsData = [
+            { title: "Presentan programa oficial de la Feria de Cadereyta 2025.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Feria" },
+            { title: "Anuncian cierre de vialidades en el centro de Jalpan por obras.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Obras" },
+            { title: "Querétaro se posiciona como líder en inversión aeroespacial.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Qro" },
+            { title: "Invitan a la ruta del queso y el vino en Cadereyta este fin de semana.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Ruta" },
+            { title: "Jalpan de Serra Pueblo Mágico, rompe récord de visitantes.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Turismo" },
+            { title: "Abren nueva convocatoria para becas universitarias en Querétaro.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Becas" }
+        ];
+        let newsHTML = '';
+        newsData.forEach(news => {
+            newsHTML += `<a href="${news.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center flex-shrink-0 px-6 py-3 hover:bg-orange-800 transition-colors rounded-lg"><img src="${news.thumbnail}" alt="Miniatura" class="h-10 w-10 object-cover rounded-md mr-4 flex-shrink-0"><span class="text-sm text-orange-200 whitespace-normal">${news.title}</span></a>`;
+        });
+        newsList.innerHTML = newsHTML + newsHTML;
+        newsList.classList.add('animate-scroll');
+    }
+
+
+    // --- 3. LÓGICA DE INICIO ---
+    // Este "listener" espera a que todo el HTML esté cargado ANTES de ejecutar el código.
+    // Aquí es donde todo se pone en marcha.
+    window.addEventListener('DOMContentLoaded', () => {
+        
+        // --- LÓGICA PWA ---
+        // Ahora es seguro buscar estos elementos
         const installBtn = document.getElementById('install-btn');
         const iosInstallBanner = document.getElementById('ios-install-banner');
         let deferredPrompt;
 
-        const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isAppInstalled = () => window.matchMedia('(display-mode: standalone)').matches;
-
         window.addEventListener('appinstalled', () => {
             console.log('PWA instalada');
-            installBtn.classList.add('hidden');
-            iosInstallBanner.classList.add('hidden');
+            if (installBtn) installBtn.classList.add('hidden');
+            if (iosInstallBanner) iosInstallBanner.classList.add('hidden');
         });
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            if (!isAppInstalled()) {
+            if (!isAppInstalled() && installBtn) {
                 console.log('Evento beforeinstallprompt disparado. Mostrando botón.');
                 installBtn.classList.remove('hidden');
             }
         });
 
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.prompt();
-                console.log(`Respuesta del usuario: ${outcome}`);
-                deferredPrompt = null;
-                installBtn.classList.add('hidden');
-            }
-        });
+        // Solo añadimos el 'click' si el botón existe
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.prompt();
+                    console.log(`Respuesta del usuario: ${outcome}`);
+                    deferredPrompt = null;
+                    installBtn.classList.add('hidden');
+                }
+            });
+        }
 
         // Mostrar banner de instrucciones para iOS
-        if (isIOS() && !isAppInstalled()) {
+        if (isIOS() && !isAppInstalled() && iosInstallBanner) {
             iosInstallBanner.classList.remove('hidden');
         }
         
-        // --- FIN: LÓGICA DE PWA ---
-
-        // --- INICIO: LÓGICA DE LA APLICACIÓN (EL CÓDIGO QUE FALTABA) ---
-        window.addEventListener('DOMContentLoaded', () => {
-            const splashScreen = document.getElementById('splash-screen');
-            const mainContent = document.getElementById('main-content');
-            
-            // 1. Esto es lo que quita la pantalla azul
+        // --- LÓGICA SPLASH SCREEN ---
+        // ¡Esta es la parte que oculta la pantalla azul!
+        const splashScreen = document.getElementById('splash-screen');
+        const mainContent = document.getElementById('main-content');
+        
+        setTimeout(() => {
+            if (splashScreen) splashScreen.classList.add('opacity-0');
+            if (mainContent) mainContent.classList.remove('opacity-0');
             setTimeout(() => {
-                splashScreen?.classList.add('opacity-0');
-                setTimeout(() => splashScreen?.classList.add('hidden'), 500);
-                mainContent?.classList.remove('opacity-0');
-            }, 2000); // 2 segundos de splash
+                if (splashScreen) splashScreen.classList.add('hidden');
+            }, 500);
+        }, 2000); // 2 segundos de splash
 
-            // 2. Esto inicia los reproductores
-            initializePlayer({
-                stationName: 'Kebuena Cadereyta', playerId: 'player-1', playPauseBtnId: 'play-pause-btn-1', playIconId: 'play-icon-1', pauseIconId: 'pause-icon-1', volumeControlId: 'volume-control-1', videoOverlayId: 'video-overlay-1', loadingTextId: 'loading-text-1', playerLogoId: 'player-logo-1', currentTimeId: 'current-time-1', totalTimeId: 'total-time-1', streamUrl: "https://laradiossl.online:10567/;"
-            });
-            initializePlayer({
-                stationName: 'Kebuena Jalpan', playerId: 'player-2', playPauseBtnId: 'play-pause-btn-2', playIconId: 'play-icon-2', pauseIconId: 'pause-icon-2', volumeControlId: 'volume-control-2', videoOverlayId: 'video-overlay-2', loadingTextId: 'loading-text-2', playerLogoId: 'player-logo-2', currentTimeId: 'current-time-2', totalTimeId: 'total-time-2', streamUrl: "https://laradiossl.online:10485/;"
-            });
-
-            // 3. Esto carga las noticias y banners
-            populateNews();
-            populateBanners();
+        
+        // --- INICIAR REPRODUCTORES Y NOTICIAS ---
+        // Ahora llamamos a las funciones para que todo comience
+        initializePlayer({
+            stationName: 'Kebuena Cadereyta', playerId: 'player-1', playPauseBtnId: 'play-pause-btn-1', playIconId: 'play-icon-1', pauseIconId: 'pause-icon-1', volumeControlId: 'volume-control-1', videoOverlayId: 'video-overlay-1', loadingTextId: 'loading-text-1', playerLogoId: 'player-logo-1', currentTimeId: 'current-time-1', totalTimeId: 'total-time-1', streamUrl: "https://laradiossl.online:10567/;"
         });
-
-        function populateBanners() {
-            const bannerImages = ['banner1.jpeg', 'banner2.jpeg', 'banner3.jpeg', 'banner4.jpeg', 'banner5.jpeg', 'banner8.jpeg'];
-            const baseUrl = 'https://fantasma-beep.github.io/kebuenaqro/';
-            const bannerList = document.getElementById('banner-list');
-            if (!bannerList) return;
-            let bannerHTML = '';
-            bannerImages.forEach(imgFile => {
-                bannerHTML += `<div class="w-full flex-shrink-0 bg-black flex justify-center items-center h-48"><img src="${baseUrl}${imgFile}" alt="Banner"></div>`;
-            });
-            bannerList.innerHTML = bannerHTML;
-            let currentBanner = 0;
-            if (bannerImages.length > 1) {
-                setInterval(() => {
-                    currentBanner = (currentBanner + 1) % bannerImages.length;
-                    bannerList.style.transform = `translateX(-${currentBanner * 100}%)`;
-                }, 5000);
-            }
-        }
-
-        const players = [];
-        function initializePlayer(config) {
-            const player = document.getElementById(config.playerId);
-            const playPauseBtn = document.getElementById(config.playPauseBtnId);
-            const playIcon = document.getElementById(config.playIconId);
-            const pauseIcon = document.getElementById(config.pauseIconId);
-            const volumeControl = document.getElementById(config.volumeControlId);
-            const videoOverlay = document.getElementById(config.videoOverlayId);
-            const loadingText = document.getElementById(config.loadingTextId);
-            const currentTimeEl = document.getElementById(config.currentTimeId);
-            const totalTimeEl = document.getElementById(config.totalTimeId);
-            let elapsedTimeInterval = null;
-            let secondsElapsed = 0;
-            players.push(player);
-            function formatTime(s) {
-                const hours = Math.floor(s / 3600); const minutes = Math.floor((s % 3600) / 60); const seconds = s % 60;
-                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`.replace(/^00:/, '');
-            }
-            function updateClock() {
-                if (!totalTimeEl) return;
-                const now = new Date();
-                totalTimeEl.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-            }
-            setInterval(updateClock, 1000); updateClock();
-            function setPlayState(isPlaying) {
-                playIcon.classList.toggle('hidden', isPlaying);
-                pauseIcon.classList.toggle('hidden', !isPlaying);
-            }
-            playPauseBtn.addEventListener('click', () => {
-                if (player.paused) {
-                    loadingText.textContent = "Conectando..."; videoOverlay.classList.remove('opacity-0');
-                    player.src = ""; player.src = config.streamUrl; player.load();
-                    player.play().catch(e => console.error('Error al iniciar stream:', e));
-                } else {
-                    player.pause();
-                }
-            });
-            player.addEventListener('play', () => {
-                players.forEach(p => { if (p !== player && !p.paused) p.pause(); });
-                videoOverlay.classList.add('opacity-0'); setPlayState(true); secondsElapsed = 0; currentTimeEl.textContent = '00:00';
-                if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
-                elapsedTimeInterval = setInterval(() => { secondsElapsed++; currentTimeEl.textContent = formatTime(secondsElapsed); }, 1000);
-            });
-            player.addEventListener('pause', () => {
-                setPlayState(false); if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
-            });
-            player.addEventListener('error', () => {
-                loadingText.innerHTML = `<span class="text-red-400">Error en ${config.stationName}</span>`;
-                videoOverlay.classList.remove('opacity-0'); setPlayState(false);
-                if (elapsedTimeInterval) clearInterval(elapsedTimeInterval); currentTimeEl.textContent = '--:--';
-            });
-            volumeControl.addEventListener('input', (e) => { player.volume = e.target.value / 100; });
-            loadingText.textContent = "Haz clic para escuchar";
-        }
-
-        function populateNews() {
-            const newsList = document.getElementById('news-list');
-            if (!newsList) return;
-            const newsData = [
-                { title: "Presentan programa oficial de la Feria de Cadereyta 2025.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Feria" },
-                { title: "Anuncian cierre de vialidades en el centro de Jalpan por obras.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Obras" },
-                { title: "Querétaro se posiciona como líder en inversión aeroespacial.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Qro" },
-                { title: "Invitan a la ruta del queso y el vino en Cadereyta este fin de semana.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Ruta" },
-                { title: "Jalpan de Serra Pueblo Mágico, rompe récord de visitantes.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Turismo" },
-                { title: "Abren nueva convocatoria para becas universitarias en Querétaro.", link: "#", thumbnail: "https://placehold.co/80x80/c2410c/FFFFFF?text=Becas" }
-            ];
-            let newsHTML = '';
-            newsData.forEach(news => {
-                newsHTML += `<a href="${news.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center flex-shrink-0 px-6 py-3 hover:bg-orange-800 transition-colors rounded-lg"><img src="${news.thumbnail}" alt="Miniatura" class="h-10 w-10 object-cover rounded-md mr-4 flex-shrink-0"><span class="text-sm text-orange-200 whitespace-normal">${news.title}</span></a>`;
-            });
-            newsList.innerHTML = newsHTML + newsHTML;
-            newsList.classList.add('animate-scroll');
-        }
-    </script>
+        initializePlayer({
+            stationName: 'Kebuena Jalpan', playerId: 'player-2', playPauseBtnId: 'play-pause-btn-2', playIconId: 'play-icon-2', pauseIconId: 'pause-icon-2', volumeControlId: 'volume-control-2', videoOverlayId: 'video-overlay-2', loadingTextId: 'loading-text-2', playerLogoId: 'player-logo-2', currentTimeId: 'current-time-2', totalTimeId: 'total-time-2', streamUrl: "https://laradiossl.online:10485/;"
+        });
+        
+        populateNews();
+        populateBanners();
+    });
+</script>
