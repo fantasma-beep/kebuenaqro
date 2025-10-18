@@ -6,20 +6,17 @@
     <title>Kebuenaqro</title>
     <meta name="theme-color" content="#c2410c"/>
     <meta name="description" content="Reproductor de streaming de Kebuenaqro.">
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6">
-
     <style>
         body {
-            /* === CAMBIO v5: Se quita la imagen de fondo que daba error 404 === */
             background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98));
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
+        /* ... (el resto de tu CSS va aquí) ... */
         input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;width:100%}
         input[type=range]:focus{outline:none}
         input[type=range]::-webkit-slider-runnable-track{background-color:#9a3412;border-radius:.5rem;height:.5rem}
@@ -46,7 +43,6 @@
         </div>
 
         <div class="flex flex-col md:flex-row justify-center gap-8">
-            
             <div class="w-full max-w-md bg-orange-700 rounded-2xl shadow-2xl overflow-hidden border border-orange-800">
                 <div class="aspect-video bg-white flex items-center justify-center relative group">
                     <img id="player-logo-1" src="https://fantasma-beep.github.io/kebuenaqro/logo.png?v=4" alt="Kebuenaqro Logo Original" class="w-52 h-52 object-contain rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/208x208/1e293b/f97316?text=Logo';">
@@ -142,11 +138,11 @@
     </div>
 
     <script>
-        // --- INICIO: LÓGICA DE PWA (v5) ---
+        // --- INICIO: LÓGICA DE PWA (v7) ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW v5 registrado exitosamente.')) // <-- Actualizado a v5
+                    .then(reg => console.log('SW v7 registrado exitosamente.')) // <-- Actualizado a v7
                     .catch(err => console.error('Error al registrar SW:', err));
             });
         }
