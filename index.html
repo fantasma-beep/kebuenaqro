@@ -9,8 +9,8 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6">
-
     <style>
         body {
             background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98)), url('https://fantasma-beep.github.io/kebuenaqro/494615713_1348055410294820_9029691649736311255_n.jpg');
@@ -38,12 +38,14 @@
     </div>
 
     <div id="main-content" class="w-full max-w-5xl mx-auto opacity-0 transition-opacity duration-500">
+        
         <div class="mb-8 w-full overflow-hidden rounded-lg border border-orange-700/50 bg-black/20">
-             <div id="banner-list" class="flex transition-transform duration-700 ease-in-out"></div>
+            <div id="banner-list" class="flex transition-transform duration-700 ease-in-out"></div>
         </div>
- 
+
         <div class="flex flex-col md:flex-row justify-center gap-8">
-             <div class="w-full max-w-md bg-orange-700 rounded-2xl shadow-2xl overflow-hidden border border-orange-800">
+            
+            <div class="w-full max-w-md bg-orange-700 rounded-2xl shadow-2xl overflow-hidden border border-orange-800">
                 <div class="aspect-video bg-white flex items-center justify-center relative group">
                     <img id="player-logo-1" src="https://fantasma-beep.github.io/kebuenaqro/logo.png?v=4" alt="Kebuenaqro Logo Original" class="w-52 h-52 object-contain rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/208x208/1e293b/f97316?text=Logo';">
                     <audio id="player-1" class="w-full h-full hidden" crossOrigin="anonymous"></audio>
@@ -76,8 +78,8 @@
                     </div>
                 </div>
             </div>
-             
-             <div class="w-full max-w-md bg-orange-700 rounded-2xl shadow-2xl overflow-hidden border border-orange-800">
+
+            <div class="w-full max-w-md bg-orange-700 rounded-2xl shadow-2xl overflow-hidden border border-orange-800">
                 <div class="aspect-video bg-white flex items-center justify-center relative group">
                     <img id="player-logo-2" src="https://fantasma-beep.github.io/kebuenaqro/logotipo5.png?v=7" alt="Kebuenaqro Logo" class="w-52 h-52 object-contain rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/208x208/1e293b/f97316?text=Logo';">
                     <audio id="player-2" class="w-full h-full hidden" crossOrigin="anonymous"></audio>
@@ -111,7 +113,7 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="mt-8">
             <div class="bg-orange-800/80 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden border border-orange-700">
                 <div id="news-ticker-container" class="whitespace-nowrap">
@@ -135,29 +137,31 @@
                  www.kebuenaqro.mx
              </a>
         </div>
-
     </div>
 
     <script>
-        // --- INICIO: LÓGICA DE PWA ---
-        if ('serviceWorker' in navigator && (location.protocol === 'http:' || location.protocol === 'https:')) {
+        // --- INICIO: LÓGICA DE PWA (CORREGIDA) ---
+        // Se registra el nuevo Service Worker 'sw.js'
+        if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // *** LÍNEA DESACTIVADA A PROPÓSITO ***
-                // navigator.serviceWorker.register('./sw.js').then(reg => console.log('SW registrado!')).catch(err => console.error('Error al registrar SW:', err));
-                console.log('Registro de Service Worker OMITIDO para evitar errores.');
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW v3 registrado exitosamente.'))
+                    .catch(err => console.error('Error al registrar SW:', err));
             });
         }
         
-        // (El resto de tu script original va aquí, SIN CAMBIOS)
+        // El resto de la lógica PWA original (estaba bien)
         const installBtn = document.getElementById('install-btn');
         const iosInstallBanner = document.getElementById('ios-install-banner');
         let deferredPrompt;
         const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isAndroid = () => /Android/.test(navigator.userAgent);
         const isAppInstalled = () => window.matchMedia('(display-mode: standalone)').matches;
+        
         window.addEventListener('appinstalled', () => {
             installBtn.classList.add('hidden');
         });
+        
         window.addEventListener('beforeinstallprompt', (e) => {
          if (isAppInstalled()) return;
          e.preventDefault();
@@ -166,18 +170,22 @@
            installBtn.classList.remove('hidden');
          }
         });
+        
         installBtn.addEventListener('click', async () => {
          if (deferredPrompt) {
            deferredPrompt.prompt();
          }
         });
+        
         if (isIOS() && !isAppInstalled()) {
            iosInstallBanner.classList.remove('hidden');
         }
         // --- FIN: LÓGICA DE PWA ---
 
-        // El resto de tu código de inicialización...
+
+        // --- INICIO: LÓGICA DE LA APLICACIÓN (ORIGINAL) ---
         window.addEventListener('DOMContentLoaded', () => {
+            // Manejo del Splash Screen
             const splashScreen = document.getElementById('splash-screen');
             const mainContent = document.getElementById('main-content');
             setTimeout(() => {
@@ -185,16 +193,21 @@
                 setTimeout(() => splashScreen?.classList.add('hidden'), 500);
                 mainContent?.classList.remove('opacity-0');
             }, 2000);
+            
+            // Inicializar reproductores
             initializePlayer({
                 stationName: 'Kebuena Cadereyta', playerId: 'player-1', playPauseBtnId: 'play-pause-btn-1', playIconId: 'play-icon-1', pauseIconId: 'pause-icon-1', volumeControlId: 'volume-control-1', videoOverlayId: 'video-overlay-1', loadingTextId: 'loading-text-1', playerLogoId: 'player-logo-1', currentTimeId: 'current-time-1', totalTimeId: 'total-time-1', streamUrl: "https://laradiossl.online:10567/;"
             });
             initializePlayer({
                 stationName: 'Kebuena Jalpan', playerId: 'player-2', playPauseBtnId: 'play-pause-btn-2', playIconId: 'play-icon-2', pauseIconId: 'pause-icon-2', volumeControlId: 'volume-control-2', videoOverlayId: 'video-overlay-2', loadingTextId: 'loading-text-2', playerLogoId: 'player-logo-2', currentTimeId: 'current-time-2', totalTimeId: 'total-time-2', streamUrl: "https://laradiossl.online:10485/;"
             });
+            
+            // Cargar contenido dinámico
             populateNews();
             populateBanners();
         });
 
+        // Función para Banners
         function populateBanners() {
             const bannerImages = ['banner1.jpeg', 'banner2.jpeg', 'banner3.jpeg', 'banner4.jpeg', 'banner5.jpeg', 'banner8.jpeg'];
             const baseUrl = 'https://fantasma-beep.github.io/kebuenaqro/';
@@ -213,6 +226,8 @@
                 }, 5000);
             }
         }
+        
+        // Lógica de Reproductores
         const players = [];
         function initializePlayer(config) {
             const player = document.getElementById(config.playerId);
@@ -227,20 +242,24 @@
             let elapsedTimeInterval = null;
             let secondsElapsed = 0;
             players.push(player);
+            
             function formatTime(s) {
                 const hours = Math.floor(s / 3600); const minutes = Math.floor((s % 3600) / 60); const seconds = s % 60;
                 return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`.replace(/^00:/, '');
             }
+            
             function updateClock() {
                 if (!totalTimeEl) return;
                 const now = new Date();
                 totalTimeEl.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
             }
             setInterval(updateClock, 1000); updateClock();
+            
             function setPlayState(isPlaying) {
                 playIcon.classList.toggle('hidden', isPlaying);
                 pauseIcon.classList.toggle('hidden', !isPlaying);
             }
+            
             playPauseBtn.addEventListener('click', () => {
                 if (player.paused) {
                     loadingText.textContent = "Conectando..."; videoOverlay.classList.remove('opacity-0');
@@ -250,23 +269,29 @@
                     player.pause();
                 }
             });
+            
             player.addEventListener('play', () => {
                 players.forEach(p => { if (p !== player && !p.paused) p.pause(); });
                 videoOverlay.classList.add('opacity-0'); setPlayState(true); secondsElapsed = 0; currentTimeEl.textContent = '00:00';
                 if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
                 elapsedTimeInterval = setInterval(() => { secondsElapsed++; currentTimeEl.textContent = formatTime(secondsElapsed); }, 1000);
             });
+            
             player.addEventListener('pause', () => {
                 setPlayState(false); if (elapsedTimeInterval) clearInterval(elapsedTimeInterval);
             });
+            
             player.addEventListener('error', () => {
                 loadingText.innerHTML = `<span class="text-red-400">Error en ${config.stationName}</span>`;
                 videoOverlay.classList.remove('opacity-0'); setPlayState(false);
                 if (elapsedTimeInterval) clearInterval(elapsedTimeInterval); currentTimeEl.textContent = '--:--';
             });
+            
             volumeControl.addEventListener('input', (e) => { player.volume = e.target.value / 100; });
             loadingText.textContent = "Haz clic para escuchar";
         }
+        
+        // Función para Noticias
         function populateNews() {
             const newsList = document.getElementById('news-list');
             if (!newsList) return;
