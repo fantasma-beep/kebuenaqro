@@ -1,63 +1,20 @@
-const CACHE_NAME = 'kebuena-cache-v1';
-const urlsToCache = [
-  '/',
-  '/index.html?v=2',
-  '/manifest.json',
-  '/logo-ke-buena-web.png',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/sw.js',
-  'https://cdn.tailwindcss.com'
-];
+// Este archivo es el Service Worker.
+// Su simple existencia y registro es lo que permite que Android ofrezca la opción de instalar la PWA.
 
-// Instalar SW y cachear recursos esenciales
-self.addEventListener('install', event => {
-  console.log('Service Worker instalado');
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
-  );
+self.addEventListener('install', (event) => {
+  // Este evento se dispara cuando el trabajador de servicio se instala.
+  console.log('Service Worker: Instalado');
 });
 
-// Activar SW y eliminar caches antiguas
-self.addEventListener('activate', event => {
-  console.log('Service Worker activado');
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(key => key !== CACHE_NAME)
-            .map(key => caches.delete(key))
-      )
-    )
-  );
+self.addEventListener('activate', (event) => {
+  // Este evento se dispara cuando el trabajador de servicio se activa.
+  console.log('Service Worker: Activado');
 });
 
-// Manejo de fetch
-self.addEventListener('fetch', event => {
-  const requestUrl = event.request.url;
-
-  // No cachear streams de audio en vivo
-  if (requestUrl.includes('laradiossl.online')) {
-    event.respondWith(fetch(event.request));
-    return;
-  }
-
-  // Para otros recursos, usar cache first
-  event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      if (cachedResponse) return cachedResponse;
-      return fetch(event.request).then(networkResponse => {
-        // Guardar en cache solo si es una respuesta OK y tipo básico
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-          const responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
-        }
-        return networkResponse;
-      }).catch(() => {
-        // Opcional: fallback a un recurso offline
-        if (event.request.destination === 'document') {
-          return caches.match('/index.html?v=2');
-        }
-      });
-    })
-  );
+self.addEventListener('fetch', (event) => {
+  // Este evento se dispara cada vez que la página solicita un recurso (imágenes, guiones, etc.).
+  // Para una aplicación de streaming, no guardamos nada en caché para asegurar que el contenido sea siempre en vivo.
+  // Simplemente pasamos la solicitud a la red.
+  event.respondWith(fetch(event.request));
 });
+
