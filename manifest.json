@@ -1,21 +1,23 @@
 {
   "name": "Kebuenaqro",
-  "short_name": "Kebuenaqro",
-  "start_url": "./index.html",
+  "short_name": "Kebuena",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#1e293b",
   "theme_color": "#c2410c",
-  "description": "Reproductor de Kebuenaqro.",
+  "description": "Reproductor de Kebuena Querétaro.",
   "icons": [
     {
-      "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png",
+      "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png",
+      "src": "https://fantasma-beep.github.io/kebuenaqro/logo-ke-buena-web.png?v=6",
       "type": "image/png",
       "sizes": "512x512"
     }
   ]
 }
+
+
